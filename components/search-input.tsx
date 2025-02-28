@@ -2,19 +2,20 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
-import { Search, UserPlus } from "lucide-react";
+import { FilePenLine, Search, UserPlus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { DeleteUserButton } from "./delete-user-btn";
 
 interface iUser {
   id: string;
@@ -108,6 +109,7 @@ export function SearchInputWithData({ users }: SearchInputWithDataProps) {
               <TableHead>Role</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Last Active</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -131,9 +133,27 @@ export function SearchInputWithData({ users }: SearchInputWithDataProps) {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>{user.role}</TableCell>
+                  <TableCell>{user.role.toUpperCase()}</TableCell>
                   <TableCell>{renderStatusBadge(user.status)}</TableCell>
                   <TableCell>{formatDate(user.lastActive)}</TableCell>
+                  <TableRow>
+                    {/* Other TableCell components for the row */}
+
+                    {/* Edit Button */}
+                    <TableCell>
+                      <Button
+                        className="rounded-none bg-blue-500 hover:bg-blue-500"
+                        variant={"outline"}
+                      >
+                        <Link href={`/dashboard/admin/users/edit/${user.id}`}>
+                        <FilePenLine className="text-white" size={"icon"} />
+                        </Link>
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <DeleteUserButton userId={user.id} />
+                    </TableCell>
+                  </TableRow>
                 </TableRow>
               ))
             ) : (

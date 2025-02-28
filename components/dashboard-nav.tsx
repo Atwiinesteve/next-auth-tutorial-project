@@ -12,23 +12,23 @@ import { usePathname } from 'next/navigation';
 
 const items = [
   {
-    name: 'Dashboard',
-    href: '/dashboard',
+    name: 'Admin Dashboard',
+    href: '/dashboard/admin',
     icon: LayoutDashboard,
   },
   {
     name: 'Users',
-    href: '/dashboard/users',
+    href: '/dashboard/admin/users',
     icon: Users,
   },
   {
     name: 'Products',
-    href: '/dashboard/products',
+    href: '#-',
     icon: ShoppingCart,
   },
   {
     name: 'Settings',
-    href: '/dashboard/settings',
+    href: '#',
     icon: Settings,
   },
 ];

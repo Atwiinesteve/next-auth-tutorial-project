@@ -1,19 +1,28 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart3, Settings, Shield, Users } from 'lucide-react';
-import Link from 'next/link';
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { BarChart3, Settings, Shield, Users } from "lucide-react";
+import Link from "next/link";
 
 export default function UsersPage() {
   return (
     <div className="container mx-auto py-10">
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold tracking-tight">Welcome to User Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Welcome to User Dashboard
+          </h1>
           <p className="text-muted-foreground">
             Manage and monitor your registered users with ease.
           </p>
         </div>
-        
+
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -29,7 +38,9 @@ export default function UsersPage() {
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">Active Users</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Active Users
+              </CardTitle>
               <Shield className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -74,7 +85,10 @@ export default function UsersPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p>Access the complete list of users, edit their details, and manage their permissions.</p>
+              <p>
+                Access the complete list of users, edit their details, and
+                manage their permissions.
+              </p>
             </CardContent>
             <CardFooter>
               <Link href="/dashboard/admin/users" passHref>
@@ -90,9 +104,16 @@ export default function UsersPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-2">
-              <Button variant="outline" className="justify-start">
-                <Users className="mr-2 h-4 w-4" />
-                Add New User
+              <Button variant="outline" className="justify-start" asChild>
+                <Link
+                  href={"/dashboard/admin/users/create-new"}
+                  className={`!justify-start ${buttonVariants({
+                    variant: "outline",
+                  })}`}
+                >
+                  <Users className="mr-2 h-4 w-4" />
+                  Add New User
+                </Link>
               </Button>
               <Button variant="outline" className="justify-start">
                 <Shield className="mr-2 h-4 w-4" />

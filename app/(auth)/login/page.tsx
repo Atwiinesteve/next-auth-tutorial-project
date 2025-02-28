@@ -1,9 +1,5 @@
 "use client";
-
-<<<<<<< HEAD
-=======
 import { oAuthSignInAction } from "@/actions/oauth.actions";
->>>>>>> ba4d7f26062ef11cec5246217f51e522bc072f7b
 import { loginUserAction } from "@/actions/signin-user";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,10 +11,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-<<<<<<< HEAD
-import { signInWithGithub, signInWithGoogle } from "@/lib/oauth.actions";
-=======
->>>>>>> ba4d7f26062ef11cec5246217f51e522bc072f7b
 import { loginSchema } from "@/schemas/auth-schems";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";

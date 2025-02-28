@@ -5,16 +5,10 @@ import NextAuth from "next-auth";
 import credentials from "next-auth/providers/credentials";
 import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
-<<<<<<< HEAD
-import prisma from "./lib/prisma.db";
-import { loginSchema } from "./schemas/auth-schems";
-import { getUserByEmail } from "./utils/user-queries";
-=======
-import { getUserByEmail } from "./actions/get-user-by-email";
 import { verifyEmail } from "./actions/verify-user-email";
 import prisma from "./lib/prisma.db";
 import { loginSchema } from "./schemas/auth-schems";
->>>>>>> ba4d7f26062ef11cec5246217f51e522bc072f7b
+import { getUserByEmail } from "./utils/user-email-query";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
