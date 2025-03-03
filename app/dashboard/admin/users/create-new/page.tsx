@@ -23,15 +23,19 @@ import { createUserSchema } from "@/schemas/auth-schems";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { redirect } from "next/navigation";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-export default async function CreateUserForm() {
-  const session = await auth();
-  
-    if (!session) redirect("/login");
-
+export default function CreateUserForm() {
+  React.useEffect(() => {
+    const checkSession = async () => {
+      const session = await auth();
+      if (!session) redirect("/login");
+    };
+    checkSession();
+  }, []);
   const form = useForm<z.infer<typeof createUserSchema>>({
     resolver: zodResolver(createUserSchema),
     defaultValues: {
@@ -44,13 +48,13 @@ export default async function CreateUserForm() {
   const { formState } = form;
 
   async function onSubmit(values: z.infer<typeof createUserSchema>) {
-    const response = await createUserAction(values)
-    if(response.success) {
-        toast.success(`User created successfully.`)
-        redirect(`/dashboard/admin/users`)
+    const response = await createUserAction(values);
+    if (response.success) {
+      toast.success(`User created successfully.`);
+      redirect(`/dashboard/admin/users`);
     } else {
-        toast.error(`User not created.`)
-        redirect(`/dashboard/admin/users/create-new`)
+      toast.error(`User not created.`);
+      redirect(`/dashboard/admin/users/create-new`);
     }
   }
 
@@ -81,7 +85,11 @@ export default async function CreateUserForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="stephenkiiza123@gmail.com" type="" {...field} />
+                <Input
+                  placeholder="stephenkiiza123@gmail.com"
+                  type=""
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -110,19 +118,19 @@ export default async function CreateUserForm() {
           )}
         />
         <Button
-              type="submit"
-              className="w-full"
-              disabled={formState.isSubmitting}
-            >
-              {formState.isSubmitting ? (
-                <>
-                  <Loader2 className="animate-spin" />
-                  Creating...
-                </>
-              ) : (
-                `Create User`
-              )}
-            </Button>
+          type="submit"
+          className="w-full"
+          disabled={formState.isSubmitting}
+        >
+          {formState.isSubmitting ? (
+            <>
+              <Loader2 className="animate-spin" />
+              Creating...
+            </>
+          ) : (
+            `Create User`
+          )}
+        </Button>
       </form>
     </Form>
   );

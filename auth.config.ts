@@ -28,14 +28,11 @@ export const authConfig = {
 			) {
 				token.role = USER_ROLES.ADMIN;
 			}
-
-			console.log("token", token);
 			return token;
 		},
 		session({ session, token }) {
 			session.user.id = token.id as string;
 			session.user.role = token.role as string;
-			console.log("session", session);
 			return session;
 		},
 		signIn({ user, account, profile }) {

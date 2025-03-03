@@ -6,13 +6,13 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button, buttonVariants } from "./ui/button";
 import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuGroup,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
 export default async function NavigationBar() {
@@ -27,6 +27,7 @@ export default async function NavigationBar() {
               <span className="text-xl font-bold">AuthFlow</span>
             </Link>
           </div>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -108,7 +109,10 @@ export default async function NavigationBar() {
             <Link href="/auth/login" className={buttonVariants({ size: "sm" })}>
               Sign in
             </Link>
-            <Link className={buttonVariants({ size: "sm" })} href={"/auth/register"}>
+            <Link
+              className={buttonVariants({ size: "sm" })}
+              href={"/auth/register"}
+            >
               Sign Up
             </Link>
           </div>
