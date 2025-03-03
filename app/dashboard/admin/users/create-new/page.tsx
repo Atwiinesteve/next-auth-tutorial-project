@@ -1,6 +1,7 @@
 "use client";
 
 import { createUserAction } from "@/actions/create-user";
+import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -26,7 +27,11 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-export default function CreateUserForm() {
+export default async function CreateUserForm() {
+  const session = await auth();
+  
+    if (!session) redirect("/login");
+
   const form = useForm<z.infer<typeof createUserSchema>>({
     resolver: zodResolver(createUserSchema),
     defaultValues: {
@@ -45,7 +50,7 @@ export default function CreateUserForm() {
         redirect(`/dashboard/admin/users`)
     } else {
         toast.error(`User not created.`)
-        redirect(`/dasboard/admin/users/create-new`)
+        redirect(`/dashboard/admin/users/create-new`)
     }
   }
 
@@ -62,7 +67,7 @@ export default function CreateUserForm() {
             <FormItem>
               <FormLabel>Names</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" type="" {...field} />
+                <Input placeholder="Kiiza Atwiine Stephen" type="" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -76,7 +81,7 @@ export default function CreateUserForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" type="" {...field} />
+                <Input placeholder="stephenkiiza123@gmail.com" type="" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -92,7 +97,7 @@ export default function CreateUserForm() {
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
+                    <SelectValue placeholder="Choose either USER / ADMIN." />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

@@ -1,21 +1,20 @@
 import { getUserById } from "@/actions/get-user-by-id";
+import { auth } from "@/auth";
 import { EditUserForm } from "@/components/edit-user-form";
+import { redirect } from "next/navigation";
 
-export default async function EditUserPage({
-  params,
-}: {
-  params: { userId: string };
-}) {
-  const user = await getUserById(params.userId);
+type Params = Promise<{ userId: string }>;
 
-  if (!user) {
-    return <div>User not found.</div>;
-  }
-
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Edit User</h1>
-      <EditUserForm data={params?.userId} />
-    </div>
-  );
+export default async function EditUserPage({ params }: { params: Params }) {
+  const session = await auth();
+  
+    if (!session) redirect("/login");
+	const { userId } = await params;
+  const userData = await getUserById(userId)
+	return (
+		<div className="p-6">
+			<h1 className="text-2xl font-bold mb-6">Edit User</h1>
+			<EditUserForm user={userData} />
+		</div>
+	);
 }

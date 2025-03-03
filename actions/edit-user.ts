@@ -5,65 +5,73 @@ import { updateUserSchema } from "@/schemas/auth-schems";
 import { z } from "zod";
 
 export async function editUser(
-  userId: string,
-  values: z.infer<typeof updateUserSchema>
+	userId: string,
+	values: z.infer<typeof updateUserSchema>,
 ) {
-  try {
-    // Validate input data
-    const validatedData = updateUserSchema.safeParse(values);
+	try {
+		// Validate input data
+		const validatedData = updateUserSchema.safeParse(values);
 
-    if (!validatedData.success) {
-      return {
-        success: false,
-        message: "Invalid input data.",
-        statusCode: 400,
-      };
-    }
+		if (!validatedData.success) {
+			return {
+				success: false,
+				message: "Invalid input data.",
+				statusCode: 400,
+			};
+		}
 
-    const { name, email, role } = validatedData.data;
+		const { name, email, role, id } = validatedData.data;
+		// const userSession = await auth();
 
-    // Check if the user exists
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-    });
+		// if (!userSession?.user?.id || userSession?.user?.id !== id) {
+		// 	return {
+		// 		success: false,
+		// 		error: "Unauthorized.",
+		// 		statusCode: 401,
+		// 	};
+		// }
 
-    if (!user) {
-      return {
-        success: false,
-        message: "User not found.",
-        statusCode: 404,
-      };
-    }
+		// if (userSession?.user?.name === name) {
+		// 	return {
+		// 		data: { email, name, role, id },
+		// 		success: true,
+		// 		statusCode: 200,
+		// 	};
+		// }
 
-    // Update the user
-    await prisma.user.update({
-      where: { id: userId },
-      data: { name, email, role },
-    });
+		// Check if the user exists
+		const user = await prisma.user.findUnique({
+			where: { id: userId },
+		});
 
-    return {
-      success: true,
-      message: "User updated successfully.",
-      statusCode: 200,
-    };
-  } catch (error) {
-    console.error("Error updating user:", error);
+		if (!user) {
+			return {
+				success: false,
+				message: "User not found.",
+				statusCode: 404,
+			};
+		}
 
-    // Handle specific Prisma errors
-    if (error instanceof Error) {
-      if (error.message.includes("Unique constraint failed")) {
-        return {
-          success: false,
-          message: "Email already exists.",
-          statusCode: 409,
-        };
-      }
-    }
+		// Update the user
+		const updatedUser = await prisma.user.update({
+			where: { id: userId },
+			data: { name, email, role },
+		});
 
-    return {
-      success: false,
-      message: "An error occurred while updating the user.",
-      statusCode: 500,
-    };
-  }
+		if (updatedUser) {
+			return {
+				success: true,
+				message: "User updated successfully.",
+				statusCode: 200,
+			};
+		} else {
+			return {
+				success: false,
+				message: "User not updated successfully.",
+				statusCode: 404,
+			};
+		}
+	} catch (error) {
+		console.error("Error updating user:", error);
+	}
 }
