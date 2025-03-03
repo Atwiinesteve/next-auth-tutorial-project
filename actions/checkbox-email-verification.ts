@@ -1,6 +1,6 @@
 "use server";
 
-import { sendEmail } from "@/lib/email";
+import { sendEmail } from "@/lib/nodemailer";
 import prisma from "@/lib/prisma.db"; // Import Prisma client
 
 export async function sendEmailVerificationNotification(userId: string) {
