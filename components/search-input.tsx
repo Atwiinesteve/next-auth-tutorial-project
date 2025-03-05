@@ -108,7 +108,7 @@ export function SearchInputWithData({ users }: SearchInputWithDataProps) {
               <TableHead>Status</TableHead>
               <TableHead>Last Active</TableHead>
               <TableHead>Email Verified</TableHead>
-              <TableHead>Action</TableHead>
+              <TableHead align="center">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

@@ -1,9 +1,9 @@
 "use client";
 
 import { sendEmailVerificationNotification } from "@/actions/checkbox-email-verification";
+import { unverifyUserEmail } from "@/actions/unverify-user-email"; // Import the new action
 import { useState } from "react";
 import { toast } from "sonner";
-import { Input } from "./ui/input";
 
 interface EmailVerificationCheckboxProps {
   userId: string;
@@ -19,23 +19,47 @@ export function EmailVerificationCheckbox({
 
   const handleCheckboxChange = async () => {
     setIsLoading(true);
-    const response = await sendEmailVerificationNotification(userId);
-    if (response.success) {
-      setIsChecked(true); // Mark the checkbox as checked
-      toast.success(response.message); // Show success message
-    } else {
-      toast.error(response.message); // Show error message
+    try {
+      if (isChecked) {
+        // Unverify the email
+        const response = await unverifyUserEmail(userId);
+        if (response.success) {
+          setIsChecked(false); // Uncheck the checkbox
+          toast.info(response.message); // Show success message
+        } else {
+          toast.error(response.message); // Show error message
+        }
+      } else {
+        // Verify the email
+        const response = await sendEmailVerificationNotification(
+          userId,
+          !isChecked
+        );
+        if (response.success) {
+          setIsChecked(true); // Check the checkbox
+          toast.success(response.message); // Show success message
+        } else {
+          toast.error(response.message); // Show error message
+        }
+      }
+    } catch (error) {
+      toast.error("An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false); // Stop loading
     }
-    setIsLoading(false);
   };
 
   return (
-    <Input
-      type="checkbox"
-      className="border-2 border-slate-900 bg-white rounded-full peer relative w-4 h-4"
-      checked={isChecked}
-      onChange={handleCheckboxChange}
-      disabled={isLoading || isChecked} // Disable if loading or already checked
-    />
+    <div className="flex items-center">
+      <input
+        type="checkbox"
+        className={`form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out rounded ${
+          isLoading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+        }`}
+        checked={isChecked}
+        onChange={handleCheckboxChange}
+        disabled={isLoading} // Disable if loading
+      />
+    </div>
   );
 }

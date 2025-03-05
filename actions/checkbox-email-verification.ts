@@ -1,9 +1,12 @@
 "use server";
 
-import { sendEmail } from "@/lib/nodemailer";
+import { emailClient } from "@/app/mails/send-mails";
 import prisma from "@/lib/prisma.db"; // Import Prisma client
 
-export async function sendEmailVerificationNotification(userId: string) {
+export async function sendEmailVerificationNotification(
+  userId: string,
+  verify: boolean // New parameter to indicate whether to verify or unverify
+) {
   try {
     // Fetch the user's email from the database
     const user = await prisma.user.findUnique({
@@ -11,7 +14,9 @@ export async function sendEmailVerificationNotification(userId: string) {
         id: userId,
       },
       select: {
+        name: true,
         email: true,
+        emailVerified: true,
       },
     });
 
@@ -22,32 +27,50 @@ export async function sendEmailVerificationNotification(userId: string) {
       };
     }
 
-    // Send the email notification
-    await sendEmail({
-      to: user.email,
-      subject: "Email Verified",
-      text: "Your email has been verified successfully.",
-    });
-
-    // Mark the email as verified in the database
+    // Update the email verification status in the database
     await prisma.user.update({
       where: {
         id: userId,
       },
       data: {
-        emailVerified: new Date(), // Set the emailVerified field to the current date
+        emailVerified: verify ? new Date() : null, // Set to current date if verifying, null if unverifying
       },
     });
 
+    const sender = {
+      email: "hello@demomailtrap.com",
+      name: "Stephen Kiiza",
+    };
+
+    const recipients = [
+      {
+        email: user.email,
+      },
+    ];
+
+    emailClient
+      .send({
+        from: sender,
+        to: recipients,
+        template_uuid: "c6ed094e-dcc3-40b1-9353-cb42aaeb7c7c",
+        template_variables: {
+          name: user.name,
+          email: user.email,
+        },
+      })
+      .then(console.log).catch(error => console.log(error));
+
     return {
       success: true,
-      message: "Email verification message has been sent.",
+      message: verify
+        ? "Email verified successfully."
+        : "Email unverified successfully.",
     };
   } catch (error) {
-    console.error("Error sending email notification:", error);
+    console.error("Error updating email verification status:", error);
     return {
       success: false,
-      message: "Failed to send email notification.",
+      message: "Failed to update email verification status.",
     };
   }
 }
