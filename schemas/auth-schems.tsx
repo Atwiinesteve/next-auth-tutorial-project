@@ -43,3 +43,7 @@ export const updateUserSchema = z.object({
     .email({ message: "Invalid email address" }),
   role: z.string(),
 });
+
+export const verificationTokenSchema = z.object({
+  token: z.string().min(6, "Token must be exactly 6 characters long"),
+});

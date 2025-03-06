@@ -58,7 +58,8 @@ export async function sendEmailVerificationNotification(
           email: user.email,
         },
       })
-      .then(console.log).catch(error => console.log(error));
+      .then(console.log)
+      .catch((error) => console.log(error));
 
     return {
       success: true,
