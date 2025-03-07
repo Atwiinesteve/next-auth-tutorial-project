@@ -3,8 +3,6 @@
 import bcrypt from "bcryptjs";
 import * as z from "zod";
 
-import { emailClient } from "@/app/mails/send-mails";
-import { USER_ROLES } from "@/lib/constants";
 import prisma from "@/lib/prisma.db";
 import { registerSchema } from "@/schemas/auth-schems";
 import { createVerificationTokenAction } from "./create-verification-token";
@@ -39,36 +37,12 @@ export async function registerUserAction(
 
     if (existingUser?.id) {
       if (!existingUser.emailVerified) {
-        const verificationToken = createVerificationTokenAction(email);
-        const sender = {
-          email: "hello@demomailtrap.com",
-          name: "Stephen Kiiza",
-        };
-
-        const recipients = [
-          {
-            email: existingUser.email,
-          },
-        ];
-
-        emailClient
-          .send({
-            from: sender,
-            to: recipients,
-            template_uuid: "74964250-dbe0-4987-9f38-86b64f657003",
-            template_variables: {
-              name: existingUser.name,
-              verificationCode: (await verificationToken).token,
-              email: existingUser.email,
-            },
-          })
-          .then(console.log)
-          .catch((error) => console.log(error));
+        const verificationToken = await createVerificationTokenAction(email);
+        console.log(verificationToken);
         return {
           success: false,
-          message:
-            "Email exists but not Verified. Verification token sent to email.",
-          statusCode: 409,
+          message: "Verification email sent. Please check your inbox.",
+          statusCode: 400,
         };
       }
     }
@@ -93,7 +67,7 @@ export async function registerUserAction(
         name,
         email,
         password: hashedPassword,
-        role: isAdmin ? USER_ROLES.ADMIN : USER_ROLES.USER,
+        role: isAdmin ? "ADMIN" : "USER",
       },
       select: {
         id: true,
@@ -103,33 +77,8 @@ export async function registerUserAction(
       },
     });
 
-    const verificationToken = createVerificationTokenAction(email);
-    const sender = {
-      email: "hello@demomailtrap.com",
-      name: "Stephen Kiiza",
-    };
-
-    const recipients = [
-      {
-        email: data.email,
-      },
-    ];
-
-    emailClient
-      .send({
-        from: sender,
-        to: recipients,
-        template_uuid: "74964250-dbe0-4987-9f38-86b64f657003",
-        template_variables: {
-          name: data.name,
-          verificationCode: (await verificationToken).token,
-          email: data.email,
-        },
-      })
-      .then(console.log)
-      .catch((error) => console.log(error));
+    const verificationToken = await createVerificationTokenAction(email);
     console.log(verificationToken);
-
     return { success: true, data, statusCode: 201 };
   } catch (error) {
     console.error(error);

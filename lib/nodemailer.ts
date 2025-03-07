@@ -1,18 +1,12 @@
 import nodemailer from "nodemailer";
-import "server-only";
 
-const transport = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+// Create a Nodemailer transporter for Brevo
+export const transporter = nodemailer.createTransport({
+  host: "smtp-relay.brevo.com", // Brevo's SMTP server
+  port: 587, // Brevo's SMTP port
+  secure: false, // Use TLS
   auth: {
-    type: "OAuth2",
-    user: process.env.NODEMAILER_GOOGLE_SMTP_USER,
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    accessToken: process.env.NODEMAILER_GOOGLE_ACCESS_TOKEN,
-    refreshToken: process.env.NODEMAILER_GOOGLE_REFRESH_TOKEN,
+    user: process.env.BREVO_USER, // Your Brevo email address or SMTP username
+    pass: process.env.BREVO_PASSWORD, // Your Brevo SMTP password or API key
   },
 });
-
-export default transport;

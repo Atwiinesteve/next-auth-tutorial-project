@@ -4,12 +4,12 @@ import { oAuthSignInAction } from "@/actions/oauth.actions";
 import { registerUserAction } from "@/actions/signup-user";
 import { Button } from "@/components/ui/button";
 import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { registerSchema } from "@/schemas/auth-schems";
@@ -42,7 +42,7 @@ export default function RegisterPage() {
       toast.success(
         "Registration successful. Verification Token sent to your email."
       );
-      redirect("/verify-user-token");
+      redirect("/verify");
     } else {
       toast.error(response?.message);
       redirect("/auth/register");

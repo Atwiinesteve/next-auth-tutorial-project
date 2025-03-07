@@ -18,13 +18,14 @@ import {
 import { verificationTokenSchema } from "@/schemas/auth-schems";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 
 export default function VerifyTokenPage() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof verificationTokenSchema>>({
     resolver: zodResolver(verificationTokenSchema),
     defaultValues: {
@@ -41,7 +42,7 @@ export default function VerifyTokenPage() {
 
       if (result?.success) {
         toast.success(result?.message);
-         redirect("/auth/login");
+         router.push("/auth/login");
       } else {
         toast.error(result?.message);
          redirect("/verify-user-token");
