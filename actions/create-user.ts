@@ -27,7 +27,7 @@ export async function createUserAction(
       },
     });
 
-    if (existingUser) {
+    if (existingUser?.email) {
       return {
         success: false,
         message: "Email already taken.",
@@ -43,7 +43,7 @@ export async function createUserAction(
       },
     });
 
-    return { success: true, data, statusCode: 201 };
+    return { success: true, data, statusCode: 201, message: "User created successfully." };
   } catch (error) {
     console.error(error);
     return {

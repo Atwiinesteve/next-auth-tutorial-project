@@ -78,6 +78,14 @@ export function SearchInputWithData({ users }: SearchInputWithDataProps) {
     }
   };
 
+  const renderEmailVerificationStatus = (emailVerified: Date | null) => {
+    return emailVerified ? (
+      <Badge className="bg-green-500 hover:bg-green-600">Verified</Badge>
+    ) : (
+      <Badge variant="destructive">Unverified</Badge>
+    );
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -135,7 +143,10 @@ export function SearchInputWithData({ users }: SearchInputWithDataProps) {
                   <TableCell>{user.role.toUpperCase()}</TableCell>
                   <TableCell>{renderStatusBadge(user.status)}</TableCell>
                   <TableCell>{formatDate(user.lastActive)}</TableCell>
-                  <TableCell align="char">
+                  <TableCell>
+                    {renderEmailVerificationStatus(user.emailVerified)}
+                  </TableCell>
+                  <TableCell>
                     <EmailVerificationCheckbox
                       userId={user.id}
                       isVerified={!!user.emailVerified} // Pass whether the email is already verified

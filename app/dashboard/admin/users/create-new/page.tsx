@@ -50,10 +50,10 @@ export default function CreateUserForm() {
   async function onSubmit(values: z.infer<typeof createUserSchema>) {
     const response = await createUserAction(values);
     if (response.success) {
-      toast.success(`User created successfully.`);
+      toast.success(response?.message || "User created successfully.");
       redirect(`/dashboard/admin/users`);
     } else {
-      toast.error(`User not created.`);
+      toast.error(response?.message || "Error creating user.");
       redirect(`/dashboard/admin/users/create-new`);
     }
   }

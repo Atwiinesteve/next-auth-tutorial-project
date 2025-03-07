@@ -18,7 +18,7 @@ import {
 export default async function NavigationBar() {
   const userDetails = await auth();
   return (
-    <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+    <div className="container w-full mx-auto px-4 h-16 flex items-center justify-between">
       {userDetails?.user ? (
         <>
           <div className="flex items-center space-x-2">

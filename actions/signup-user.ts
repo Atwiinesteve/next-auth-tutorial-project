@@ -3,6 +3,7 @@
 import bcrypt from "bcryptjs";
 import * as z from "zod";
 
+import { sendVerificationEmail } from "@/lib/email"; // Import the email sending function
 import prisma from "@/lib/prisma.db";
 import { registerSchema } from "@/schemas/auth-schems";
 import { createVerificationTokenAction } from "./create-verification-token";
@@ -38,7 +39,10 @@ export async function registerUserAction(
     if (existingUser?.id) {
       if (!existingUser.emailVerified) {
         const verificationToken = await createVerificationTokenAction(email);
-        console.log(verificationToken);
+
+        // Send verification email
+        await sendVerificationEmail(email, verificationToken.token);
+
         return {
           success: false,
           message: "Verification email sent. Please check your inbox.",
@@ -78,7 +82,10 @@ export async function registerUserAction(
     });
 
     const verificationToken = await createVerificationTokenAction(email);
-    console.log(verificationToken);
+
+    // Send verification email
+    await sendVerificationEmail(email, verificationToken.token);
+
     return { success: true, data, statusCode: 201 };
   } catch (error) {
     console.error(error);

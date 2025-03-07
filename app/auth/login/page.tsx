@@ -16,8 +16,7 @@ import { loginSchema } from "@/schemas/auth-schems";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { redirect, useSearchParams } from "next/navigation";
-import React from "react";
+import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -34,19 +33,6 @@ export default function LoginPage() {
   });
 
   const { formState } = form;
-
-  const [errorMessage, setErrorMessage] = React.useState("");
-  const searchParams = useSearchParams();
-  const error = searchParams.get("error");
-
-  // React.useEffect(() => {
-  // 	if (!error) return;
-  // 	if (error === "OAuthAccountNotLinked") {
-  // 		setErrorMessage("This Account is already in use.");
-  // 	} else {
-  // 		setErrorMessage("An error occured. Please try again later.");
-  // 	}
-  // }, [error]);
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     const response = await loginUserAction(values);
@@ -94,11 +80,6 @@ export default function LoginPage() {
           >
             <FcGoogle className="mr-2 h-4 w-4" />
           </Button>
-          {/* {errorMessage && (
-						<p className="mt-2 text-sm font-medium text-destructive">
-							{errorMessage}
-						</p>
-					)} */}
         </div>
 
         {/* Divider */}
@@ -142,6 +123,14 @@ export default function LoginPage() {
                 </FormItem>
               )}
             />
+            <div className="my-5">
+              <Link
+                href="/auth/forgot-password"
+                className="text-primary hover:underline text-sm"
+              >
+                Forgot password?
+              </Link>
+            </div>
             <Button
               type="submit"
               className="w-full"

@@ -1,7 +1,7 @@
 "use server";
 
-import { emailClient } from "@/app/mails/send-mails";
-import prisma from "@/lib/prisma.db"; // Import Prisma client
+import prisma from "@/lib/prisma.db";
+import { sendNotificationEmail } from "@/lib/verification-email";
 
 export async function sendEmailVerificationNotification(
   userId: string,
@@ -37,29 +37,12 @@ export async function sendEmailVerificationNotification(
       },
     });
 
-    const sender = {
-      email: "hello@demomailtrap.com",
-      name: "Stephen Kiiza",
-    };
-
-    const recipients = [
-      {
-        email: user.email,
-      },
-    ];
-
-    emailClient
-      .send({
-        from: sender,
-        to: recipients,
-        template_uuid: "c6ed094e-dcc3-40b1-9353-cb42aaeb7c7c",
-        template_variables: {
-          name: user.name,
-          email: user.email,
-        },
-      })
-      .then(console.log)
-      .catch((error) => console.log(error));
+    // Send a notification email to the user
+    await sendNotificationEmail({
+      email: user.email,
+      name: user.name,
+      verified: verify,
+    });
 
     return {
       success: true,
